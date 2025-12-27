@@ -20,10 +20,10 @@ export default function App() {
     return saved
       ? JSON.parse(saved)
       : {
-          html: "<h1>Hello VS Code UI</h1>",
-          css: "body { background:#111; color:#fff }",
-          js: "console.log('JS Loaded');",
-        };
+        html: "<h1>Hello VS Code UI</h1>",
+        css: "body { background:#111; color:#fff }",
+        js: "console.log('JS Loaded');",
+      };
   });
 
   const [logs, setLogs] = useState([]);
@@ -191,78 +191,89 @@ export default function App() {
   };
 
   return (
-    <div className="app" ref={containerRef}>
-      {/* FILE TABS */}
-      <div className="tabs">
-        {["html", "css", "js"].map((f) => (
-          <button
-            key={f}
-            className={activeFile === f ? "active" : ""}
-            onClick={() => setActiveFile(f)}
-          >
-            {f === "html" ? "index.html" : f === "css" ? "style.css" : "app.js"}
-          </button>
-        ))}
+  <div className="app" ref={containerRef}>
+    <div className="main">
+      {/* LEFT : EDITOR */}
+      <div className="editor-pane" style={{ width: `${editorWidth}%` }}>
+        {/* FILE TABS */}
+        <div className="tabs">
+          {["html", "css", "js"].map((f) => (
+            <button
+              key={f}
+              className={activeFile === f ? "active" : ""}
+              onClick={() => setActiveFile(f)}
+            >
+              {f === "html"
+                ? "index.html"
+                : f === "css"
+                ? "style.css"
+                : "app.js"}
+            </button>
+          ))}
+        </div>
+
+        {/* MONACO EDITOR */}
+        <Editor
+          theme="vs-dark"
+          language={activeFile === "js" ? "javascript" : activeFile}
+          value={files[activeFile]}
+          onMount={(e) => (editorRef.current = e)}
+          onChange={(v) => setFiles({ ...files, [activeFile]: v || "" })}
+          options={{
+            automaticLayout: true,
+            minimap: { enabled: false },
+          }}
+        />
       </div>
 
-      <div className="main">
-        {/* EDITOR */}
-        <div className="editor-pane" style={{ width: `${editorWidth}%` }}>
-          <Editor
-            theme="vs-dark"
-            language={activeFile === "js" ? "javascript" : activeFile}
-            value={files[activeFile]}
-            onMount={(e) => (editorRef.current = e)}
-            onChange={(v) => setFiles({ ...files, [activeFile]: v || "" })}
-            options={{ automaticLayout: true, minimap: { enabled: false } }}
-          />
-        </div>
+      {/* SPLITTER */}
+      <div className="splitter-x" onMouseDown={startEditorResize} />
 
-        <div className="splitter-x" onMouseDown={startEditorResize} />
-
-        {/* RIGHT */}
-        <div className="right-pane">
-          <div
-            className="preview-pane"
-            style={{ height: `${100 - terminalHeight}%` }}
-            ref={previewRef}
-          >
-            <div className="preview-toolbar">
-              <button onClick={() => setMobileView(!mobileView)}>📱</button>
-              <button onClick={toggleInspect}>
-                {inspectMode ? "Disable Pick" : "Pick Element"}
-              </button>
-              <button onClick={toggleFullscreen}>
-                {isFullscreen ? "❌" : "⛶"}
-              </button>
-            </div>
-
-            <div className={`preview-frame ${mobileView ? "mobile" : ""}`}>
-              <iframe ref={iframeRef} sandbox="allow-scripts" srcDoc={srcDoc} />
-            </div>
+      {/* RIGHT : PREVIEW + TERMINAL */}
+      <div className="right-pane">
+        <div
+          className="preview-pane"
+          style={{ height: `${100 - terminalHeight}%` }}
+          ref={previewRef}
+        >
+          <div className="preview-toolbar">
+            <button title="Mobile Preview" onClick={() => setMobileView(!mobileView)}>
+              📱
+            </button>
+            <button onClick={toggleInspect}>
+              {inspectMode ? "Disable Pick" : "Pick Element"}
+            </button>
+            <button onClick={toggleFullscreen}>
+              {isFullscreen ? "✘" : "⛶"}
+            </button>
           </div>
 
-          <div className="splitter-y" onMouseDown={startTerminalResize} />
-
-          <div className="console-pane" style={{ height: `${terminalHeight}%` }}>
-            <div className="console-header">Terminal</div>
-            <div className="console-body">
-              {logs.map((l, i) => (
-                <div key={i}>>> {l}</div>
-              ))}
-            </div>
+          <div className={`preview-frame ${mobileView ? "mobile" : ""}`}>
+            <iframe ref={iframeRef} sandbox="allow-scripts" srcDoc={srcDoc} />
           </div>
-
-          {selectedEl && (
-            <div className="inspect-panel">
-              <div><b>Tag:</b> {selectedEl.tag}</div>
-              <div><b>ID:</b> {selectedEl.id || "—"}</div>
-              <div><b>Class:</b> {selectedEl.className || "—"}</div>
-              <div><b>Style:</b> {selectedEl.styles}</div>
-            </div>
-          )}
         </div>
+
+        <div className="splitter-y" onMouseDown={startTerminalResize} />
+
+        <div className="console-pane" style={{ height: `${terminalHeight}%` }}>
+          <div className="console-header">Terminal</div>
+          <div className="console-body">
+            {logs.map((l, i) => (
+              <div key={i}>>> {l}</div>
+            ))}
+          </div>
+        </div>
+
+        {selectedEl && (
+          <div className="inspect-panel">
+            <div><b>Tag:</b> {selectedEl.tag}</div>
+            <div><b>ID:</b> {selectedEl.id || "—"}</div>
+            <div><b>Class:</b> {selectedEl.className || "—"}</div>
+            <div><b>Style:</b> {selectedEl.styles}</div>
+          </div>
+        )}
       </div>
     </div>
-  );
+  </div>
+);
 }

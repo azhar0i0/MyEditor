@@ -1,0 +1,137 @@
+body {
+  margin: 0;
+  background: #1e1e1e;
+  color: white;
+  font-family: system-ui;
+}
+
+.app {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* TABS */
+.tabs {
+  display: flex;
+  background: #252526;
+  border-bottom: 1px solid #333;
+}
+
+.tabs button {
+  background: none;
+  border: none;
+  color: #ccc;
+  padding: 10px 16px;
+  cursor: pointer;
+}
+
+.tabs button.active {
+  color: white;
+  border-bottom: 2px solid #007acc;
+}
+
+/* MAIN */
+.main {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+/* EDITOR */
+.editor-pane {
+  min-width: 300px;
+  border-right: 1px solid #333;
+  position: relative;
+}
+
+/* SPLITTERS */
+.splitter-x {
+  width: 5px;
+  cursor: col-resize;
+  background: #333;
+}
+
+.splitter-y {
+  height: 5px;
+  cursor: row-resize;
+  background: #333;
+}
+
+/* RIGHT */
+.right-pane {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* PREVIEW */
+.preview-pane iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: white;
+}
+
+/* CONSOLE */
+.console-pane {
+  background: #111;
+  display: flex;
+  flex-direction: column;
+}
+
+.console-header {
+  padding: 6px 10px;
+  background: #252526;
+  font-size: 13px;
+  border-bottom: 1px solid #333;
+}
+
+.console-body {
+  flex: 1;
+  padding: 8px;
+  font-family: monospace;
+  overflow-y: auto;
+}
+
+/* PREVIEW TOOLBAR */
+.preview-toolbar {
+  display: flex;
+  gap: 8px;
+  padding: 6px;
+  background: #252526;
+  border-bottom: 1px solid #333;
+}
+
+.preview-toolbar button {
+  background: #333;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+/* PREVIEW FRAME */
+.preview-frame {
+  width: 100%;
+  height: calc(100% - 34px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.preview-frame iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: white;
+}
+
+/* MOBILE PREVIEW (iPhone 14 Pro Max) */
+.preview-frame.mobile iframe {
+  width: 430px;
+  height: 932px;
+  border-radius: 20px;
+  border: 10px solid #000;
+}
